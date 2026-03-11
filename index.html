@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaerai – Platforma AI dla małych i średnich firm</title>
+  <meta name="description" content="Kaerai porządkuje dokumenty, odpowiada na pytania o firmę i daje Ci pełną kontrolę operacyjną bez ciągłej obecności. Jeden system dla Twojej firmy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #080d1a; color: #e2e8f0; }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #6090ff 0%, #93b4ff 50%, #c0d3ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Glass card */
+    .glass-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+    }
+    .glass-card:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(96,144,255,0.3);
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+
+    /* Glowing button */
+    .btn-primary {
+      background: linear-gradient(135deg, #3b6ef5 0%, #6090ff 100%);
+      box-shadow: 0 0 20px rgba(96,144,255,0.35);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 32px rgba(96,144,255,0.55);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(96,144,255,0.4);
+      color: #93b4ff;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(96,144,255,0.1);
+      border-color: rgba(96,144,255,0.7);
+    }
+
+    /* Section dividers */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(96,144,255,0.3), transparent);
+    }
+
+    /* Dashboard mockup */
+    .widget-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .widget-card:hover {
+      border-color: rgba(96,144,255,0.4);
+      transition: all 0.3s;
+    }
+
+    /* Number badge */
+    .step-badge {
+      background: linear-gradient(135deg, #3b6ef5, #6090ff);
+      box-shadow: 0 0 16px rgba(96,144,255,0.4);
+    }
+
+    /* Pricing card highlight */
+    .pricing-popular {
+      background: linear-gradient(160deg, rgba(59,110,245,0.2) 0%, rgba(96,144,255,0.08) 100%);
+      border-color: rgba(96,144,255,0.5) !important;
+    }
+
+    /* Hero glow */
+    .hero-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,110,245,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Fade in on scroll */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Nav */
+    nav {
+      background: rgba(8,13,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* Progress bar in widget */
+    .progress-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #3b6ef5, #93b4ff);
+    }
+
+    /* Chat bubble */
+    .chat-bubble-user {
+      background: linear-gradient(135deg, #3b6ef5, #6090ff);
+      border-radius: 16px 16px 4px 16px;
+    }
+    .chat-bubble-ai {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px 16px 16px 4px;
+    }
+
+    /* Mobile menu */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #080d1a; }
+    ::-webkit-scrollbar-thumb { background: rgba(96,144,255,0.4); border-radius: 3px; }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg btn-primary flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-white tracking-tight">Kaerai</span>
+        </div>
+
+        <!-- Desktop nav links -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#problem" class="text-slate-400 hover:text-white transition-colors text-sm font-medium">Problem</a>
+          <a href="#solution" class="text-slate-400 hover:text-white transition-colors text-sm font-medium">Rozwiązanie</a>
+          <a href="#features" class="text-slate-400 hover:text-white transition-colors text-sm font-medium">Funkcje</a>
+          <a href="#pricing" class="text-slate-400 hover:text-white transition-colors text-sm font-medium">Cennik</a>
+        </div>
+
+        <!-- CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="#demo" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">Umów demo</a>
+          <a href="#trial" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white">Darmowy trial</a>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button id="menu-toggle" class="md:hidden text-slate-400 hover:text-white p-2">
+          <svg id="menu-icon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden border-t border-white/5">
+      <div class="px-4 py-4 space-y-3 bg-slate-950/95">
+        <a href="#problem" class="block text-slate-300 hover:text-white text-sm font-medium py-2">Problem</a>
+        <a href="#solution" class="block text-slate-300 hover:text-white text-sm font-medium py-2">Rozwiązanie</a>
+        <a href="#features" class="block text-slate-300 hover:text-white text-sm font-medium py-2">Funkcje</a>
+        <a href="#pricing" class="block text-slate-300 hover:text-white text-sm font-medium py-2">Cennik</a>
+        <div class="pt-2 flex flex-col gap-2">
+          <a href="#demo" class="btn-secondary text-center px-4 py-2.5 rounded-lg text-sm font-medium">Umów demo</a>
+          <a href="#trial" class="btn-primary text-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white">Darmowy trial</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO SECTION
+  ============================================================ -->
+  <section class="relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-hidden">
+    <!-- Background glows -->
+    <div class="hero-glow top-[-200px] left-[-200px]"></div>
+    <div class="hero-glow bottom-[-300px] right-[-200px]" style="opacity:0.6;"></div>
+    <!-- Grid pattern -->
+    <div class="absolute inset-0" style="background-image: radial-gradient(rgba(96,144,255,0.06) 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+
+        <!-- Left: Text -->
+        <div class="flex-1 text-center lg:text-left">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card text-xs font-medium text-brand-300 mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+            Platforma AI dla firm operacyjnych
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+            Pełna kontrola<br />
+            nad firmą –<br />
+            <span class="gradient-text">bez ciągłego gaszenia pożarów</span>
+          </h1>
+
+          <p class="text-lg text-slate-400 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
+            Kaerai to jedna platforma, która porządkuje dokumenty, odpowiada na pytania o Twoją firmę i pokazuje aktualny stan organizacji — bez konieczności Twojej ciągłej obecności.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            <a href="#demo" class="btn-primary px-7 py-3.5 rounded-xl text-base font-semibold text-white inline-flex items-center justify-center gap-2">
+              Umów bezpłatne demo
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+            <a href="#trial" class="btn-secondary px-7 py-3.5 rounded-xl text-base font-medium inline-flex items-center justify-center gap-2">
+              Dołącz do waitlisty
+            </a>
+          </div>
+
+          <!-- Trust badges -->
+          <div class="mt-10 flex flex-wrap items-center gap-5 justify-center lg:justify-start">
+            <div class="flex items-center gap-2 text-slate-500 text-sm">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              Bez rewolucji w firmie
+            </div>
+            <div class="flex items-center gap-2 text-slate-500 text-sm">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              Wdrożenie w 1 dzień
+            </div>
+            <div class="flex items-center gap-2 text-slate-500 text-sm">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+              14 dni bezpłatnie
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Dashboard mockup -->
+        <div class="flex-1 w-full max-w-2xl">
+          <div class="relative">
+            <!-- Glow behind dashboard -->
+            <div class="absolute inset-0 bg-brand-500/10 blur-3xl rounded-3xl"></div>
+
+            <!-- Dashboard container -->
+            <div class="relative glass-card rounded-2xl p-4 shadow-2xl border-white/10">
+              <!-- Top bar -->
+              <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-red-400/70"></div>
+                  <div class="w-2 h-2 rounded-full bg-yellow-400/70"></div>
+                  <div class="w-2 h-2 rounded-full bg-green-400/70"></div>
+                </div>
+                <span class="text-xs text-slate-500 font-medium">Kaerai – Panel główny</span>
+                <div class="flex items-center gap-1 text-xs text-slate-500">
+                  <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                  Live
+                </div>
+              </div>
+
+              <!-- Dashboard grid -->
+              <div class="grid grid-cols-3 gap-3 mb-3">
+                <!-- Widget 1: BAS score -->
+                <div class="widget-card col-span-1">
+                  <p class="text-xs text-slate-500 mb-1">Business Autonomy Score</p>
+                  <p class="text-2xl font-bold text-white">74<span class="text-brand-400 text-base">%</span></p>
+                  <div class="progress-bar mt-2">
+                    <div class="progress-fill" style="width:74%"></div>
+                  </div>
+                  <p class="text-xs text-green-400 mt-1.5">↑ +8% ten miesiąc</p>
+                </div>
+
+                <!-- Widget 2: Documents -->
+                <div class="widget-card col-span-1">
+                  <p class="text-xs text-slate-500 mb-1">Dokumenty</p>
+                  <p class="text-2xl font-bold text-white">1&nbsp;247</p>
+                  <p class="text-xs text-slate-400 mt-1">skatalogowanych</p>
+                  <p class="text-xs text-brand-400 mt-1.5">12 nowych dziś</p>
+                </div>
+
+                <!-- Widget 3: Time saved -->
+                <div class="widget-card col-span-1">
+                  <p class="text-xs text-slate-500 mb-1">Zaoszczędzony czas</p>
+                  <p class="text-2xl font-bold text-white">18<span class="text-slate-400 text-base">h</span></p>
+                  <p class="text-xs text-slate-400 mt-1">w tym tygodniu</p>
+                  <p class="text-xs text-green-400 mt-1.5">↑ +3h vs poprz. tyg.</p>
+                </div>
+              </div>
+
+              <!-- Chart-like widget -->
+              <div class="widget-card mb-3">
+                <div class="flex items-center justify-between mb-2">
+                  <p class="text-xs text-slate-400 font-medium">Aktywność operacyjna</p>
+                  <span class="text-xs text-brand-400">Ostatnie 7 dni</span>
+                </div>
+                <div class="flex items-end gap-1 h-12">
+                  <div class="flex-1 bg-brand-500/30 rounded-t" style="height:40%"></div>
+                  <div class="flex-1 bg-brand-500/40 rounded-t" style="height:60%"></div>
+                  <div class="flex-1 bg-brand-500/30 rounded-t" style="height:45%"></div>
+                  <div class="flex-1 bg-brand-500/50 rounded-t" style="height:75%"></div>
+                  <div class="flex-1 bg-brand-500/40 rounded-t" style="height:55%"></div>
+                  <div class="flex-1 bg-brand-500/60 rounded-t" style="height:85%"></div>
+                  <div class="flex-1 bg-brand-500/80 rounded-t" style="height:100%"></div>
+                </div>
+              </div>
+
+              <!-- Chat widget -->
+              <div class="widget-card">
+                <p class="text-xs text-slate-400 font-medium mb-3">Asystent firmowy</p>
+                <div class="space-y-2">
+                  <div class="flex justify-end">
+                    <div class="chat-bubble-user px-3 py-1.5 text-xs text-white max-w-[80%]">
+                      Jaki jest status faktury VAT dla klienta Omega Logistic?
+                    </div>
+                  </div>
+                  <div class="flex justify-start">
+                    <div class="chat-bubble-ai px-3 py-1.5 text-xs text-slate-200 max-w-[85%]">
+                      Faktura FV/2024/0847 dla Omega Logistic jest <span class="text-green-400">opłacona</span>. Termin płatności był 15.03, zapłacono 13.03. Kwota: 12&nbsp;300 PLN netto.
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
+                  <span class="text-xs text-slate-500 flex-1">Zapytaj o cokolwiek w firmie…</span>
+                  <div class="w-5 h-5 rounded btn-primary flex items-center justify-center">
+                    <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       PROBLEM SECTION
+  ============================================================ -->
+  <section id="problem" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Problem</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Brzmi znajomo?
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Właściciele małych i średnich firm tracą godziny każdego dnia na rzeczy, które nie powinny wymagać ich uwagi.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Problem 1 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-red-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">„Gdzie jest ta faktura?"</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Dokumenty leżą w mailach, folderach na dyskach, Excelu i w głowach pracowników. Znalezienie czegokolwiek zajmuje za dużo czasu.
+          </p>
+        </div>
+
+        <!-- Problem 2 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-orange-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">Wszystko przez Ciebie</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Jesteś wąskim gardłem własnej firmy. Każdy pracownik i klient kieruje pytania do Ciebie, bo nikt inny nie ma dostępu do informacji.
+          </p>
+        </div>
+
+        <!-- Problem 3 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-yellow-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">Praca reaktywna, nie planowa</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Dzień upływa na „gaszeniu pożarów". Zamiast zarządzać firmą strategicznie, reagujesz na bieżące sprawy od rana do nocy.
+          </p>
+        </div>
+
+        <!-- Problem 4 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">Te same pytania, w kółko</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Klienci i partnerzy pytają o te same rzeczy: statusy, terminy, dokumenty. Odpowiadasz na te pytania po kilkanaście razy dziennie.
+          </p>
+        </div>
+
+        <!-- Problem 5 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-cyan-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">Brak widoku na całość</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Nie masz jednego miejsca, które pokazuje realny stan firmy. Musisz zbierać dane z wielu źródeł, żeby odpowiedzieć na proste pytanie.
+          </p>
+        </div>
+
+        <!-- Problem 6 -->
+        <div class="glass-card rounded-xl p-6 fade-in group">
+          <div class="w-10 h-10 rounded-lg bg-pink-500/15 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold text-lg mb-2">Ręczne śledzenie wszystkiego</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Statusy zleceń, należności, dokumenty do odesłania — wszystko śledzisz ręcznie. Jedno przeoczenie i problem gotowy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       SOLUTION SECTION
+  ============================================================ -->
+  <section id="solution" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Rozwiązanie</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Jeden system, który ogarnia chaos
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Kaerai integruje się z dokumentami i danymi, które już masz — i zamienia je w zorganizowaną, przeszukiwalną bazę wiedzy Twojej firmy.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Pillar 1: Documents -->
+        <div class="glass-card rounded-2xl p-8 fade-in border border-white/10 hover:border-brand-500/40 transition-all">
+          <div class="w-12 h-12 rounded-xl btn-primary flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Porządek w dokumentach</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">
+            Automatyczna klasyfikacja faktur, umów, arkuszy i wszelkich plików. Jeden przeszukiwalny magazyn wiedzy firmowej — zamiast dziesiątek folderów.
+          </p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Szybkie wyszukiwanie po treści
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Automatyczna klasyfikacja
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Integracja z dyskami i mailem
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2: Widgets -->
+        <div class="glass-card rounded-2xl p-8 fade-in border border-brand-500/30 hover:border-brand-500/60 transition-all" style="background: rgba(59,110,245,0.06);">
+          <div class="w-12 h-12 rounded-xl btn-primary flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Widgety operacyjne</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">
+            Dashboard z kluczowymi informacjami o tym, co dzieje się w firmie. Bez przeszukiwania dziesiątek źródeł — jeden widok, który mówi wszystko.
+          </p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Statusy zleceń i płatności
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Business Autonomy Score
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Alerty i priorytety dnia
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3: Chatbot -->
+        <div class="glass-card rounded-2xl p-8 fade-in border border-white/10 hover:border-brand-500/40 transition-all">
+          <div class="w-12 h-12 rounded-xl btn-primary flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Firmowy asystent AI</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">
+            Zadaj pytanie po polsku, dostań odpowiedź opartą na dokumentach i danych Twojej firmy. Zero przekopywania przez pliki — natychmiastowa informacja.
+          </p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Pytania w języku naturalnym
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Odpowiedzi z Twoich danych
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              Dostępny dla całego zespołu
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       FEATURES SECTION
+  ============================================================ -->
+  <section id="features" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Funkcje</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Narzędzia, które faktycznie odciążają
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Każda funkcja Kaerai jest projektowana pod realne operacje małych i średnich firm — nie pod demo dla inwestorów.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Feature 1 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Inteligentne wyszukiwanie</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Wyszukaj dowolny dokument, fakturę lub informację po słowach kluczowych, dacie, kliencie lub treści. Wynik w sekundy.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Auto-klasyfikacja dokumentów</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">System automatycznie rozpoznaje i taguje faktury, umowy, oferty i inne dokumenty — bez ręcznego katalogowania.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Connectory danych</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Połącz Google Drive, Dropbox, Outlook, Excel i inne narzędzia, których już używasz. Kaerai nie wymaga migracji do nowego systemu.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Dashboard operacyjny</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Personalizowane widgety pokazujące to, co jest ważne dla Twojej firmy — należności, statusy, aktywności, wskaźniki.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Asystent w języku naturalnym</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Zadaj pytanie po polsku: „Kiedy kończy się umowa z Kowalskim?" — chatbot znajdzie odpowiedź w Twoich dokumentach.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Bezpieczna baza wiedzy</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Dane Twojej firmy są szyfrowane i odizolowane. Dostęp tylko dla Twojego zespołu, z kontrolą uprawnień na poziomie dokumentu.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 7 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Alerty i powiadomienia</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Automatyczne alerty o przeterminowanych płatnościach, dokumentach do podpisu, wygasających umowach i innych zdarzeniach.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 8 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Uprawnienia zespołowe</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Różne poziomy dostępu dla właściciela, menedżerów i pracowników. Każdy widzi to, co potrzebuje — i nic więcej.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 9 -->
+        <div class="glass-card rounded-xl p-6 fade-in">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1.5">Business Autonomy Score</h4>
+              <p class="text-slate-400 text-sm leading-relaxed">Unikalny wskaźnik mierzący, jaka część operacji działa bez Twojego bezpośredniego udziału. Realny pomiar postępu automatyzacji.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       HOW IT WORKS
+  ============================================================ -->
+  <section id="how-it-works" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Jak to działa</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Od chaosu do porządku w 3 krokach
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Bez migracji. Bez rewolucji. Bez miesięcy wdrożenia.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <!-- Connecting line (desktop) -->
+        <div class="hidden md:block absolute top-10 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-brand-500/40 to-brand-500/40" style="top:36px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);"></div>
+
+        <!-- Step 1 -->
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 step-badge rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <div class="text-brand-400 text-sm font-bold mb-1">KROK 1</div>
+          <h3 class="text-xl font-bold text-white mb-3">Podłącz źródła danych</h3>
+          <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
+            Połącz Google Drive, Outlook, dyski sieciowe lub prześlij dokumenty bezpośrednio. Kaerai obsługuje formaty, które już masz: PDF, Excel, Word, e-mail.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 step-badge rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h7"/>
+            </svg>
+          </div>
+          <div class="text-brand-400 text-sm font-bold mb-1">KROK 2</div>
+          <h3 class="text-xl font-bold text-white mb-3">Uporządkuj dokumenty i wiedzę</h3>
+          <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
+            System automatycznie klasyfikuje, taguje i indeksuje wszystkie materiały. Twoja wiedza firmowa staje się przeszukiwalną bazą — gotową do użycia.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 step-badge rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="text-brand-400 text-sm font-bold mb-1">KROK 3</div>
+          <h3 class="text-xl font-bold text-white mb-3">Pytaj i monitoruj firmę</h3>
+          <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
+            Zadawaj pytania w języku naturalnym, przeglądaj dashboard z aktualnym stanem organizacji i pozwól asystentowi obsługiwać rutynowe zapytania.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       BENEFITS SECTION
+  ============================================================ -->
+  <section id="benefits" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="fade-in">
+          <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Efekty</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+            Co się zmienia po wdrożeniu Kaerai?
+          </h2>
+          <p class="text-slate-400 text-lg mb-8">
+            Nie obiecujemy transformacji cyfrowej. Obiecujemy konkretne odciążenie — tu i teraz.
+          </p>
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold mb-1">Mniej chaosu, więcej porządku</h4>
+                <p class="text-slate-400 text-sm">Dokumenty i informacje przestają się gubić. Każdy w firmie wie, gdzie szukać danych.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold mb-1">Szybsze decyzje</h4>
+                <p class="text-slate-400 text-sm">Zamiast szukać informacji przez 20 minut, masz odpowiedź w 10 sekund. Decydujesz szybciej i pewniej.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold mb-1">Mniej zależy od Ciebie</h4>
+                <p class="text-slate-400 text-sm">Pracownicy i klienci mogą uzyskać odpowiedzi bez angażowania Ciebie w każdą sprawę.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold mb-1">Pełna kontrola nad firmą</h4>
+                <p class="text-slate-400 text-sm">Jeden dashboard zamiast dziesiątek źródeł. Wiesz co się dzieje w firmie, bez ciągłego pilnowania.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-white font-semibold mb-1">Oszczędność 10–20 godzin tygodniowo</h4>
+                <p class="text-slate-400 text-sm">Czas odzyskany na szukaniu, tłumaczeniu i powtarzaniu tych samych informacji możesz przeznaczyć na rozwój firmy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats panel -->
+        <div class="fade-in">
+          <div class="glass-card rounded-2xl p-8 border border-brand-500/20">
+            <h3 class="text-lg font-semibold text-white mb-6">Typowe efekty po 30 dniach użycia</h3>
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm text-slate-400">Czas szukania informacji</span>
+                  <span class="text-sm font-semibold text-green-400">↓ 80%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:80%; background: linear-gradient(90deg, #22c55e, #4ade80);"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm text-slate-400">Powtarzalne pytania obsługiwane przez AI</span>
+                  <span class="text-sm font-semibold text-brand-400">↑ 65%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:65%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm text-slate-400">Dokumenty dostępne bez ręcznego szukania</span>
+                  <span class="text-sm font-semibold text-brand-400">↑ 92%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:92%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm text-slate-400">Odciążenie właściciela od operacji</span>
+                  <span class="text-sm font-semibold text-green-400">↑ 70%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:70%; background: linear-gradient(90deg, #22c55e, #4ade80);"></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-6">* Dane szacunkowe na podstawie analizy przypadków użycia dla SMB</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       ICP / FOR WHOM
+  ============================================================ -->
+  <section id="for-whom" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Dla kogo</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Kaerai jest dla Ciebie, jeśli…
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Narzędzie jest projektowane pod firmy operacyjne, które nie chcą rewolucji technologicznej — tylko praktycznego systemu, który można wdrożyć bez bólu.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+        <!-- ICP 1 -->
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="text-4xl mb-4">🚚</div>
+          <h4 class="text-white font-semibold mb-2">Spedycja i logistyka</h4>
+          <p class="text-slate-400 text-sm">Firmy kurierskie, przewoźnicy, agencje celne i operatorzy transportowi zarządzający wieloma dokumentami i zleceniami.</p>
+        </div>
+
+        <!-- ICP 2 -->
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="text-4xl mb-4">✈️</div>
+          <h4 class="text-white font-semibold mb-2">Biura podróży i turystyka</h4>
+          <p class="text-slate-400 text-sm">Rodzinne biura podróży, organizatorzy wycieczek specjalistycznych i touroperatorzy obsługujący wiele zapytań klientów.</p>
+        </div>
+
+        <!-- ICP 3 -->
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="text-4xl mb-4">🔧</div>
+          <h4 class="text-white font-semibold mb-2">Firmy serwisowe i instalacyjne</h4>
+          <p class="text-slate-400 text-sm">HVAC, OZE, wykończenia, instalatorzy i firmy techniczne z wieloma zleceniami, dokumentacją serwisową i fakturami.</p>
+        </div>
+
+        <!-- ICP 4 -->
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="text-4xl mb-4">🏭</div>
+          <h4 class="text-white font-semibold mb-2">Hurtownie i dystrybutorzy B2B</h4>
+          <p class="text-slate-400 text-sm">Hurtownie specjalistyczne, dystrybutorzy regionalni i firmy handlowe zarządzające katalogami produktów, cennikami i zamówieniami.</p>
+        </div>
+      </div>
+
+      <!-- Qualifying criteria -->
+      <div class="glass-card rounded-2xl p-8 border border-brand-500/20 fade-in">
+        <h3 class="text-lg font-semibold text-white mb-6 text-center">Kaerai sprawdza się szczególnie, gdy:</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Właściciel jest wąskim gardłem w przepływie informacji</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Firma ma 5–150 pracowników i setki dokumentów</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Dane są rozproszone po Excelach, mailach i dyskach</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Dużo czasu schodzi na odpowiadanie na te same pytania</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Brak centralnego miejsca ze statusem firmy</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-brand-400 shrink-0"></div>
+            <p class="text-slate-300 text-sm">Firma nie chce dużej transformacji, tylko praktycznego narzędzia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       TRUST / ADOPTION
+  ============================================================ -->
+  <section id="trust" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Wdrożenie</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Bez wywracania firmy do góry nogami
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Wiemy, że czas i odporność na chaos są dla Ciebie kluczowe. Dlatego Kaerai wdrażasz na swoich zasadach.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h4 class="text-white font-semibold mb-2">Szybki start</h4>
+          <p class="text-slate-400 text-sm">Podstawowa konfiguracja zajmuje 1 dzień roboczy. Pierwsze efekty widoczne od razu — bez miesięcy wdrożenia.</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h4 class="text-white font-semibold mb-2">Pracujesz na tym, co masz</h4>
+          <p class="text-slate-400 text-sm">Nie musisz zmieniać formatu plików ani kupować nowych systemów. Kaerai integruje się z tym, z czego już korzystasz.</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h4 class="text-white font-semibold mb-2">Twoje dane są bezpieczne</h4>
+          <p class="text-slate-400 text-sm">Szyfrowanie w spoczynku i transmisji. Dane Twojej firmy nie są używane do trenowania modeli AI ani udostępniane stronom trzecim.</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-6 fade-in text-center">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          <h4 class="text-white font-semibold mb-2">Wsparcie na każdym etapie</h4>
+          <p class="text-slate-400 text-sm">Dedykowany opiekun wdrożenia, baza wiedzy i wsparcie przez czat. Nie zostawiamy Cię samego z nowym systemem.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       PRICING
+  ============================================================ -->
+  <section id="pricing" class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-3">Cennik</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+          Płacisz za to, z czego korzystasz
+        </h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          Cena zależy od liczby pracowników i dokumentów. Zacznij od pakietu Starter i skaluj w miarę wzrostu potrzeb.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <!-- Starter -->
+        <div class="glass-card rounded-2xl p-7 fade-in border border-white/10">
+          <div class="mb-6">
+            <p class="text-slate-400 text-sm font-medium mb-1">Starter</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-extrabold text-white">od&nbsp;299</span>
+              <span class="text-slate-400 text-sm mb-1.5">PLN/mies.</span>
+            </div>
+            <p class="text-slate-500 text-xs">do 10 pracowników · do 2&nbsp;000 dokumentów</p>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Wyszukiwanie dokumentów
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Auto-klasyfikacja dokumentów
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Chatbot firmowy (bazowy)
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              3 connectory (Drive, Outlook, Upload)
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Dashboard z 5 widgetami
+            </li>
+          </ul>
+          <a href="#demo" class="block text-center btn-secondary px-5 py-3 rounded-xl text-sm font-semibold">
+            Zacznij trial
+          </a>
+        </div>
+
+        <!-- Growth (highlighted) -->
+        <div class="glass-card pricing-popular rounded-2xl p-7 fade-in relative border">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="btn-primary px-4 py-1 rounded-full text-xs font-semibold text-white">Najpopularniejszy</span>
+          </div>
+          <div class="mb-6">
+            <p class="text-brand-300 text-sm font-medium mb-1">Growth</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-extrabold text-white">od&nbsp;799</span>
+              <span class="text-slate-400 text-sm mb-1.5">PLN/mies.</span>
+            </div>
+            <p class="text-slate-500 text-xs">do 50 pracowników · do 20&nbsp;000 dokumentów</p>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Wszystko z Starter
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Chatbot zaawansowany (pełny RAG)
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Nieograniczone connectory
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Dashboard z nieograniczonymi widgetami
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Business Autonomy Score
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Wsparcie priorytetowe
+            </li>
+          </ul>
+          <a href="#demo" class="block text-center btn-primary px-5 py-3 rounded-xl text-sm font-semibold text-white">
+            Umów demo
+          </a>
+        </div>
+
+        <!-- Scale -->
+        <div class="glass-card rounded-2xl p-7 fade-in border border-white/10">
+          <div class="mb-6">
+            <p class="text-slate-400 text-sm font-medium mb-1">Scale</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-extrabold text-white">Indywidualnie</span>
+            </div>
+            <p class="text-slate-500 text-xs">powyżej 50 pracowników · nieograniczone dokumenty</p>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Wszystko z Growth
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Dedykowany opiekun klienta
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Własne integracje i API
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Agenty workflow na miarę
+            </li>
+            <li class="flex items-center gap-2 text-sm text-slate-300">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              SLA i umowa o poufności
+            </li>
+          </ul>
+          <a href="#demo" class="block text-center btn-secondary px-5 py-3 rounded-xl text-sm font-semibold">
+            Porozmawiajmy
+          </a>
+        </div>
+      </div>
+
+      <p class="text-center text-slate-500 text-sm mt-8">
+        Wszystkie pakiety zawierają 14-dniowy bezpłatny trial bez karty kredytowej.
+      </p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ============================================================
+       FINAL CTA
+  ============================================================ -->
+  <section id="demo" class="py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="glass-card rounded-3xl p-12 border border-brand-500/25 relative overflow-hidden fade-in">
+        <!-- Background glow -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent"></div>
+        <div class="relative">
+          <p class="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-4">Zacznij już dziś</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Ile chaosu możesz usunąć<br/>ze swojej firmy?
+          </h2>
+          <p class="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">
+            Umów bezpłatne demo i zobaczymy razem, jak Kaerai dopasowuje się do Twojej firmy. Bez zobowiązań, bez długich wdrożeń.
+          </p>
+
+          <!-- CTA form -->
+          <form id="cta-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-6" onsubmit="handleFormSubmit(event)">
+            <input
+              type="email"
+              id="email-input"
+              placeholder="Twój adres e-mail"
+              required
+              class="flex-1 px-4 py-3 rounded-xl bg-white/[0.08] border border-white/15 text-white placeholder-slate-500 focus:outline-none focus:border-brand-400 text-sm"
+            />
+            <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-semibold text-white whitespace-nowrap">
+              Umów demo →
+            </button>
+          </form>
+          <div id="form-success" class="hidden text-green-400 text-sm mb-6">
+            ✓ Świetnie! Odezwiemy się w ciągu 24 godzin.
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-6 text-slate-500 text-sm">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              14 dni za darmo
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Bez karty kredytowej
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Rezygnacja w każdej chwili
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer id="trial" class="border-t border-white/7 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg btn-primary flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <span class="text-xl font-bold text-white tracking-tight">Kaerai</span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed max-w-xs">
+            Platforma AI dla małych i średnich firm. Porządkujemy Twoją wiedzę firmową, żebyś nie musiał być w firmie non-stop.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <p class="text-white font-medium text-sm mb-4">Produkt</p>
+          <ul class="space-y-2.5">
+            <li><a href="#solution" class="text-slate-500 hover:text-white text-sm transition-colors">O produkcie</a></li>
+            <li><a href="#features" class="text-slate-500 hover:text-white text-sm transition-colors">Funkcje</a></li>
+            <li><a href="#pricing" class="text-slate-500 hover:text-white text-sm transition-colors">Cennik</a></li>
+            <li><a href="#demo" class="text-slate-500 hover:text-white text-sm transition-colors">Demo</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="text-white font-medium text-sm mb-4">Firma</p>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-slate-500 hover:text-white text-sm transition-colors">Kontakt</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-white text-sm transition-colors">Blog</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-white text-sm transition-colors">Polityka prywatności</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-white text-sm transition-colors">Regulamin</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-slate-600 text-xs">© 2025 Kaerai. Wszelkie prawa zastrzeżone.</p>
+        <p class="text-slate-600 text-xs">Zaprojektowane dla firm, które chcą rosnąć mądrze.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    // Fade-in on scroll (Intersection Observer)
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), index * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    fadeEls.forEach(el => observer.observe(el));
+
+    // Demo form handler
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('cta-form');
+      const success = document.getElementById('form-success');
+      form.style.display = 'none';
+      success.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

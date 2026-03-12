@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add('js-enabled');</script>
   <title>Kaerai – Platforma AI dla małych i średnich firm</title>
   <meta name="description" content="Kaerai porządkuje dokumenty, odpowiada na pytania o firmę i daje Ci pełną kontrolę operacyjną bez ciągłej obecności. Jeden system dla Twojej firmy." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -97,11 +98,13 @@
 
     /* Fade in on scroll */
     .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .fade-in.visible {
+    .js-enabled .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .js-enabled .fade-in.visible {
       opacity: 1;
       transform: translateY(0);
     }
